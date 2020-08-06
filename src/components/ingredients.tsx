@@ -19,10 +19,10 @@ export default memo(function Ingredients({ ingredients }: Props) {
         <>
             <Text style={styles.title}>Ingredients</Text>
             {ingredients.ingredients.map((ingredient) => (
-                <>
+                <View key={ingredient}>
                     {separator}
                     <Text style={styles.text}>{ingredient}</Text>
-                </>
+                </View>
             ))}
             {separator}
         </>

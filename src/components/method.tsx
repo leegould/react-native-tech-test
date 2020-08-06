@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 export interface Props {
     method: {
@@ -17,10 +17,10 @@ export default memo(function Method({ method }: Props) {
         <>
             <Text style={styles.title}>Method</Text>
             {method.steps.map((step, idx) => (
-                <>
+                <View key={idx}>
                     <Text style={styles.subTitle}>Step {idx + 1}</Text>
                     <Text style={styles.text}>{step}</Text>
-                </>
+                </View>
             ))}
         </>
     );
