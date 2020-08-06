@@ -1,10 +1,31 @@
-import React, { memo } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { memo, useState } from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    FlatList,
+    Modal,
+    Alert,
+    TouchableHighlight,
+} from 'react-native';
 import Result from './result';
+import Recipe from './recipe';
 
 const results = require('./test_results.json');
 
 export default memo(function Results({ searchText }: { searchText: string }) {
+    const [slug, setSlug] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openModal = (aSlug: string) => {
+        setSlug(aSlug);
+        setModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -14,7 +35,15 @@ export default memo(function Results({ searchText }: { searchText: string }) {
                 data={results.data.recipe_search.hits}
                 renderItem={({ item }) => {
                     // console.log('rec', item.recipe.media[0]);
-                    return <Result searchResult={item} />;
+                    return (
+                        <TouchableHighlight
+                            onPress={() => {
+                                console.log('open', item.recipe.slug);
+                                openModal(item.recipe.slug);
+                            }}>
+                            <Result searchResult={item} />
+                        </TouchableHighlight>
+                    );
                 }}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 // refreshing={loading}
@@ -29,6 +58,14 @@ export default memo(function Results({ searchText }: { searchText: string }) {
                     <Text style={styles.placeholder}>No matches found</Text>
                 )}
             />
+            <Modal
+                animationType="slide"
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                }}>
+                <Recipe slug={slug} onClose={closeModal} />
+            </Modal>
         </View>
     );
 });

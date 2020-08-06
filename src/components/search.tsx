@@ -1,13 +1,12 @@
 import React, { useState, memo } from 'react';
 import {
-    ImageBackground,
     View,
-    Text,
     StyleSheet,
     TextInput,
     TouchableOpacity,
     Image,
 } from 'react-native';
+import Header from './header';
 import Results from './results';
 
 export default memo(function Search() {
@@ -20,13 +19,7 @@ export default memo(function Search() {
 
     return (
         <View style={styles.container}>
-            <View style={styles.headerContainer}>
-                <ImageBackground
-                    source={require('../assets/logo.png')}
-                    style={styles.logo}
-                />
-                <Text style={styles.headerText}>Recipe App</Text>
-            </View>
+            <Header />
             <View style={styles.searchBar}>
                 <TextInput
                     onChangeText={(text) => {
@@ -61,23 +54,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-start',
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        height: 50,
-        backgroundColor: '#4e674a',
-        paddingHorizontal: 20,
-    },
-    logo: {
-        width: 180,
-        height: 38,
-        marginHorizontal: 10,
-    },
-    headerText: {
-        fontSize: 25,
-        color: 'white',
     },
     searchBar: {
         height: 50,

@@ -1,24 +1,23 @@
 import React, { memo } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
 
-interface SearchResult {
-    recipe: {
-        name: string;
-        serves: string;
-        total_time: string;
+export interface Props {
+    searchResult: {
+        recipe: {
+            name: string;
+            serves: string;
+            total_time: string;
+        };
     };
 }
 
-export default memo(function Result({
-    searchResult,
-}: {
-    searchResult: SearchResult;
-}) {
+export default memo(function Result({ searchResult }: Props) {
     return (
-        <View style={styles.resultRowContainer}>
-            <View>
-                <ImageBackground style={styles.image} />
-            </View>
+        <View style={styles.container}>
+            <ImageBackground
+                source={require('../assets/placeholder.png')}
+                style={styles.image}
+            />
             <View style={styles.descriptionContainer}>
                 <Text style={[styles.descriptionRow, styles.name]}>
                     {searchResult.recipe.name}
@@ -29,10 +28,9 @@ export default memo(function Result({
                             source={require('../assets/person.png')}
                             style={styles.icon}
                         />
-                        <Text
-                            style={
-                                styles.subtext
-                            }>{` ${searchResult.recipe.serves}`}</Text>
+                        <Text style={styles.subtext}>
+                            {`${searchResult.recipe.serves}`}
+                        </Text>
                     </View>
                     <View style={styles.iconPair}>
                         <Image
@@ -40,7 +38,7 @@ export default memo(function Result({
                             style={styles.icon}
                         />
                         <Text style={styles.subtext}>
-                            {` ${searchResult.recipe.total_time
+                            {`${searchResult.recipe.total_time
                                 .replace('PT', '')
                                 .replace('H', 'H ')}`}
                         </Text>
@@ -58,7 +56,7 @@ export default memo(function Result({
 });
 
 const styles = StyleSheet.create({
-    resultRowContainer: {
+    container: {
         height: 120,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100,
-        backgroundColor: 'red',
+        backgroundColor: '#9a1c4d',
         borderRadius: 5,
     },
     iconPair: {
@@ -99,6 +97,7 @@ const styles = StyleSheet.create({
     subtext: {
         fontSize: 14,
         lineHeight: 20,
+        marginLeft: 5,
     },
     icon: {
         tintColor: 'grey',
@@ -107,6 +106,7 @@ const styles = StyleSheet.create({
         marginRight: 2,
     },
     chevron: {
+        tintColor: 'grey',
         width: 30,
         height: 30,
     },
