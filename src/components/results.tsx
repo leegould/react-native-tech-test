@@ -1,31 +1,21 @@
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     FlatList,
-    Modal,
-    Alert,
     TouchableHighlight,
 } from 'react-native';
 import Result from './result';
-import Recipe from './recipe';
 
 const results = require('./test_results.json');
 
-export default memo(function Results({ searchText }: { searchText: string }) {
-    const [slug, setSlug] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
+export interface Props {
+    searchText: string;
+    onPress: (slug: string) => void;
+}
 
-    const openModal = (aSlug: string) => {
-        setSlug(aSlug);
-        setModalVisible(true);
-    };
-
-    const closeModal = () => {
-        setModalVisible(false);
-    };
-
+export default memo(function Results({ searchText, onPress }: Props) {
     return (
         <View style={styles.container}>
             <FlatList
@@ -39,7 +29,7 @@ export default memo(function Results({ searchText }: { searchText: string }) {
                         <TouchableHighlight
                             onPress={() => {
                                 console.log('open', item.recipe.slug);
-                                openModal(item.recipe.slug);
+                                onPress(item.recipe.slug);
                             }}>
                             <Result searchResult={item} />
                         </TouchableHighlight>
@@ -58,14 +48,6 @@ export default memo(function Results({ searchText }: { searchText: string }) {
                     <Text style={styles.placeholder}>No matches found</Text>
                 )}
             />
-            <Modal
-                animationType="slide"
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert('Modal has been closed.');
-                }}>
-                <Recipe slug={slug} onClose={closeModal} />
-            </Modal>
         </View>
     );
 });

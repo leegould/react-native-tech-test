@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import HeaderModal from './headerModal';
 import Ingredients from './ingredients';
+import Method from './method';
 
 export interface Props {
     slug: string;
@@ -24,14 +25,14 @@ export default memo(function Recipe({ slug, onClose }: Props) {
     const {
         data: {
             recipe: {
-                // cook_time,
+                cook_time,
                 ingredients,
                 introduction,
                 // media,
-                // method,
+                method,
                 name,
                 notes,
-                // prep_time,
+                prep_time,
                 serves,
                 tags,
                 total_time,
@@ -53,14 +54,14 @@ export default memo(function Recipe({ slug, onClose }: Props) {
                     <Text style={[styles.text, styles.title]}>{name}</Text>
 
                     <View style={styles.row}>
-                        <View style={styles.iconPair}>
+                        <View style={styles.twinRow}>
                             <Image
                                 source={require('../assets/person.png')}
                                 style={styles.icon}
                             />
                             <Text style={styles.subtext}>{`${serves}`}</Text>
                         </View>
-                        <View style={styles.iconPair}>
+                        <View style={styles.twinRow}>
                             <Image
                                 source={require('../assets/clock.png')}
                                 style={styles.icon}
@@ -73,11 +74,13 @@ export default memo(function Recipe({ slug, onClose }: Props) {
                         </View>
                     </View>
 
-                    <Text style={[styles.text, styles.tags]}>
+                    <Text style={[styles.text, styles.tags, styles.spacing]}>
                         {tags.join(', ')}
                     </Text>
 
-                    <Text style={styles.text}>{introduction}</Text>
+                    <Text style={[styles.text, styles.spacing]}>
+                        {introduction}
+                    </Text>
 
                     {notes.length > 0 && (
                         <>
@@ -89,6 +92,31 @@ export default memo(function Recipe({ slug, onClose }: Props) {
                     )}
 
                     <Ingredients ingredients={ingredients[0]} />
+
+                    <View style={[styles.row, styles.spacing]}>
+                        <View style={[styles.twinRow, styles.margin]}>
+                            <Text style={styles.subtext}>Prep</Text>
+                            <Image
+                                source={require('../assets/clock.png')}
+                                style={styles.icon}
+                            />
+                            <Text style={styles.subtext}>
+                                {prep_time.replace('PT', '').replace('H', 'H ')}
+                            </Text>
+                        </View>
+                        <View style={[styles.twinRow, styles.margin]}>
+                            <Text style={styles.subtext}>Cook</Text>
+                            <Image
+                                source={require('../assets/clock.png')}
+                                style={styles.icon}
+                            />
+                            <Text style={styles.subtext}>
+                                {cook_time.replace('PT', '').replace('H', 'H ')}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <Method method={method[0]} />
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -132,7 +160,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
     },
-    iconPair: {
+    twinRow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -141,12 +169,18 @@ const styles = StyleSheet.create({
     subtext: {
         fontSize: 14,
         lineHeight: 20,
-        marginLeft: 5,
+        marginHorizontal: 5,
     },
     icon: {
         tintColor: 'grey',
         width: 20,
         height: 20,
         marginRight: 2,
+    },
+    spacing: {
+        marginVertical: 20,
+    },
+    margin: {
+        margin: 5,
     },
 });

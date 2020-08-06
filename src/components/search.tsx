@@ -5,16 +5,29 @@ import {
     TextInput,
     TouchableOpacity,
     Image,
+    Modal,
 } from 'react-native';
 import Header from './header';
 import Results from './results';
+import Recipe from './recipe';
 
 export default memo(function Search() {
     const [inputText, setInputText] = useState('');
     const [searchText, setSearchText] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [slug, setSlug] = useState('');
 
     const submit = () => {
         setSearchText(inputText);
+    };
+
+    const openModal = (aSlug: string) => {
+        setSlug(aSlug);
+        setModalVisible(true);
+    };
+
+    const closeModal = () => {
+        setModalVisible(false);
     };
 
     return (
@@ -45,7 +58,16 @@ export default memo(function Search() {
                     />
                 </TouchableOpacity>
             </View>
-            <Results searchText={searchText} />
+            <Results
+                searchText={searchText}
+                onPress={(aSlug) => openModal(aSlug)}
+            />
+            <Modal
+                animationType="slide"
+                visible={modalVisible}
+                supportedOrientations={['landscape', 'portrait']}>
+                <Recipe slug={slug} onClose={closeModal} />
+            </Modal>
         </View>
     );
 });
