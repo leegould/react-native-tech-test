@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { getImageFromMedia, formatTime } from '../utils/common';
+import { Media } from './types';
 
 export interface Props {
     searchResult: {
@@ -7,17 +9,25 @@ export interface Props {
             name: string;
             serves: string;
             total_time: string;
+            media: Media[];
         };
     };
 }
 
 export default memo(function Result({ searchResult }: Props) {
+    const image = getImageFromMedia(searchResult.recipe.media);
+
     return (
         <View style={styles.container}>
-            <ImageBackground
-                source={require('../assets/placeholder.png')}
-                style={styles.image}
-            />
+            {image && (
+                <Image source={{ uri: image.uri }} style={styles.image} />
+            )}
+            {!image && (
+                <Image
+                    source={require('../assets/placeholder.png')}
+                    style={styles.image}
+                />
+            )}
             <View style={styles.descriptionContainer}>
                 <Text style={[styles.descriptionRow, styles.name]}>
                     {searchResult.recipe.name}
@@ -38,9 +48,7 @@ export default memo(function Result({ searchResult }: Props) {
                             style={styles.icon}
                         />
                         <Text style={styles.subtext}>
-                            {`${searchResult.recipe.total_time
-                                .replace('PT', '')
-                                .replace('H', 'H ')}`}
+                            {`${formatTime(searchResult.recipe.total_time)}`}
                         </Text>
                     </View>
                 </View>

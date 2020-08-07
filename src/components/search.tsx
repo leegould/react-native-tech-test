@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import Header from './header';
 import Results from './results';
-import Recipe from './recipe';
+import RecipeModal from './recipeModal';
 
 export default memo(function Search() {
     const [inputText, setInputText] = useState('');
@@ -35,6 +35,7 @@ export default memo(function Search() {
             <Header />
             <View style={styles.searchBar}>
                 <TextInput
+                    autoFocus={true}
                     onChangeText={(text) => {
                         setInputText(text);
                     }}
@@ -66,7 +67,7 @@ export default memo(function Search() {
                 animationType="slide"
                 visible={modalVisible}
                 supportedOrientations={['landscape', 'portrait']}>
-                <Recipe slug={slug} onClose={closeModal} />
+                <RecipeModal slug={slug} onClose={closeModal} />
             </Modal>
         </View>
     );

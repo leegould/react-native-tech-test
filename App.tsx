@@ -16,7 +16,7 @@ const cache = new InMemoryCache({
                 recipe_search: {
                     keyArgs: ['q'],
                     merge(existing, incoming) {
-                        console.log('merge', existing, incoming);
+                        // console.log('merge', existing, incoming);
                         if (!existing) {
                             return incoming;
                         }

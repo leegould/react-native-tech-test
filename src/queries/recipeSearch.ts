@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-const recipeQuery = gql`
+const searchQuery = gql`
     query recipe_search($search: String, $page: Int, $page_size: Int) {
         recipe_search(q: $search, page: $page, page_size: $page_size) {
             total_hits
@@ -23,4 +23,4 @@ const recipeQuery = gql`
     }
 `;
 
-export default recipeQuery;
+export default searchQuery;

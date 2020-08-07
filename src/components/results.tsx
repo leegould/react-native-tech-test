@@ -6,9 +6,9 @@ import {
     FlatList,
     TouchableHighlight,
 } from 'react-native';
+import { useQuery } from '@apollo/client';
 import Result from './result';
-import RecipeQuery from '../queries/recipeSearch';
-import { useQuery, useApolloClient } from '@apollo/client';
+import SearchQuery from '../queries/recipeSearch';
 
 export interface Props {
     searchText: string;
@@ -20,12 +20,10 @@ export default memo(function Results({ searchText, onPress }: Props) {
     const pageSize = 15;
     const [page, setPage] = useState(1);
 
-    const { loading, error, data, fetchMore, refetch } = useQuery(RecipeQuery, {
+    const { loading, error, data, fetchMore, refetch } = useQuery(SearchQuery, {
         variables: { search: searchText, page: page, page_size: pageSize },
         notifyOnNetworkStatusChange: true,
     });
-
-    const client = useApolloClient();
 
     if (error) {
         console.error('Results.Error', error);
@@ -46,10 +44,6 @@ export default memo(function Results({ searchText, onPress }: Props) {
         }
     };
 
-    console.log('results', data);
-
-    console.log('cache', client.cache.extract());
-
     return (
         <View style={styles.container}>
             <FlatList
@@ -69,11 +63,9 @@ export default memo(function Results({ searchText, onPress }: Props) {
                     onEndReachedCalledDuringMomentum = false;
                 }}
                 renderItem={({ item }) => {
-                    // console.log('rec', item.recipe.media[0]);
                     return (
                         <TouchableHighlight
                             onPress={() => {
-                                console.log('open', item.recipe.slug);
                                 onPress(item.recipe.slug);
                             }}>
                             <Result searchResult={item} />
@@ -99,7 +91,13 @@ export default memo(function Results({ searchText, onPress }: Props) {
                     </Text>
                 )}
                 ListEmptyComponent={() => (
-                    <Text style={styles.placeholder}>No matches found</Text>
+                    <View style={styles.placeholderContainer}>
+                        {!loading && (
+                            <Text style={styles.placeholder}>
+                                No matches found
+                            </Text>
+                        )}
+                    </View>
                 )}
             />
         </View>
@@ -108,11 +106,10 @@ export default memo(function Results({ searchText, onPress }: Props) {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: '#f8f6f1',
-        paddingBottom: 70,
     },
     resultsContainer: {
-        flexGrow: 1,
         backgroundColor: '#f8f6f1',
     },
     headerText: {
@@ -122,7 +119,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'row',
     },
+    placeholderContainer: {
+        paddingVertical: 50,
+    },
     placeholder: {
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        padding: 20,
         fontSize: 20,
     },
     separator: {

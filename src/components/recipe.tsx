@@ -4,136 +4,127 @@ import {
     StyleSheet,
     Text,
     ImageBackground,
-    SafeAreaView,
     Image,
     ScrollView,
 } from 'react-native';
-import HeaderModal from './headerModal';
-import Ingredients from './ingredients';
-import Method from './method';
+import IngredientsList from './ingredients';
+import MethodList from './method';
+import { getImageFromMedia, formatTime } from '../utils/common';
+import { Ingredients, Media, Method } from './types';
 
 export interface Props {
-    slug: string;
-    onClose: () => void;
+    recipe: {
+        cook_time: string;
+        ingredients: Ingredients[];
+        introduction: string;
+        media: Media[];
+        method: Method[];
+        name: string;
+        notes: string;
+        prep_time: string;
+        serves: string;
+        tags: string[];
+        total_time: string;
+    };
 }
 
-export default memo(function Recipe({ slug, onClose }: Props) {
-    const result = require('./test_recipe.json');
-
-    console.log('slug', slug);
-
+export default memo(function Recipe({ recipe }: Props) {
     const {
-        data: {
-            recipe: {
-                cook_time,
-                ingredients,
-                introduction,
-                // media,
-                method,
-                name,
-                notes,
-                prep_time,
-                serves,
-                tags,
-                total_time,
-            },
-        },
-    } = result;
+        cook_time,
+        ingredients,
+        introduction,
+        media,
+        method,
+        name,
+        notes,
+        prep_time,
+        serves,
+        tags,
+        total_time,
+    } = recipe;
+
+    const image = getImageFromMedia(media);
 
     return (
-        <SafeAreaView style={styles.safeAreaContainer}>
-            <View style={styles.container}>
-                <HeaderModal onClose={onClose} />
+        <ScrollView style={styles.container}>
+            {image && (
+                <ImageBackground
+                    resizeMode="cover"
+                    source={{ uri: image.uri }}
+                    style={styles.image}
+                />
+            )}
+            {!image && (
+                <ImageBackground
+                    resizeMode="contain"
+                    source={require('../assets/placeholder.png')}
+                    style={styles.image}
+                />
+            )}
+            <Text style={[styles.text, styles.title]}>{name}</Text>
 
-                <ScrollView style={styles.contentContainer}>
-                    <ImageBackground
-                        resizeMode="contain"
-                        source={require('../assets/placeholder.png')}
-                        style={styles.image}
+            <View style={styles.row}>
+                <View style={styles.twinRow}>
+                    <Image
+                        source={require('../assets/person.png')}
+                        style={styles.icon}
                     />
-                    <Text style={[styles.text, styles.title]}>{name}</Text>
-
-                    <View style={styles.row}>
-                        <View style={styles.twinRow}>
-                            <Image
-                                source={require('../assets/person.png')}
-                                style={styles.icon}
-                            />
-                            <Text style={styles.subtext}>{`${serves}`}</Text>
-                        </View>
-                        <View style={styles.twinRow}>
-                            <Image
-                                source={require('../assets/clock.png')}
-                                style={styles.icon}
-                            />
-                            <Text style={styles.subtext}>
-                                {`${total_time
-                                    .replace('PT', '')
-                                    .replace('H', 'H ')}`}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <Text style={[styles.text, styles.tags, styles.spacing]}>
-                        {tags.join(', ')}
+                    <Text style={styles.subtext}>{`${serves}`}</Text>
+                </View>
+                <View style={styles.twinRow}>
+                    <Image
+                        source={require('../assets/clock.png')}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.subtext}>
+                        {`${formatTime(total_time)}`}
                     </Text>
-
-                    <Text style={[styles.text, styles.spacing]}>
-                        {introduction}
-                    </Text>
-
-                    {notes.length > 0 && (
-                        <>
-                            <Text style={[styles.text, styles.title]}>
-                                {"Cook's Notes"}
-                            </Text>
-                            <Text style={styles.text}>{notes}</Text>
-                        </>
-                    )}
-
-                    <Ingredients ingredients={ingredients[0]} />
-
-                    <View style={[styles.row, styles.spacing]}>
-                        <View style={[styles.twinRow, styles.margin]}>
-                            <Text style={styles.subtext}>Prep</Text>
-                            <Image
-                                source={require('../assets/clock.png')}
-                                style={styles.icon}
-                            />
-                            <Text style={styles.subtext}>
-                                {prep_time.replace('PT', '').replace('H', 'H ')}
-                            </Text>
-                        </View>
-                        <View style={[styles.twinRow, styles.margin]}>
-                            <Text style={styles.subtext}>Cook</Text>
-                            <Image
-                                source={require('../assets/clock.png')}
-                                style={styles.icon}
-                            />
-                            <Text style={styles.subtext}>
-                                {cook_time.replace('PT', '').replace('H', 'H ')}
-                            </Text>
-                        </View>
-                    </View>
-
-                    <Method method={method[0]} />
-                </ScrollView>
+                </View>
             </View>
-        </SafeAreaView>
+
+            <Text style={[styles.text, styles.tags, styles.spacing]}>
+                {tags.join(', ')}
+            </Text>
+
+            <Text style={[styles.text, styles.spacing]}>{introduction}</Text>
+
+            {notes.length > 0 && (
+                <>
+                    <Text style={[styles.text, styles.title]}>
+                        {"Cook's Notes"}
+                    </Text>
+                    <Text style={styles.text}>{notes}</Text>
+                </>
+            )}
+
+            <IngredientsList ingredients={ingredients[0]} />
+
+            <View style={[styles.row, styles.spacing]}>
+                <View style={[styles.twinRow, styles.margin]}>
+                    <Text style={styles.subtext}>Prep</Text>
+                    <Image
+                        source={require('../assets/clock.png')}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.subtext}>{formatTime(prep_time)}</Text>
+                </View>
+                <View style={[styles.twinRow, styles.margin]}>
+                    <Text style={styles.subtext}>Cook</Text>
+                    <Image
+                        source={require('../assets/clock.png')}
+                        style={styles.icon}
+                    />
+                    <Text style={styles.subtext}>{formatTime(cook_time)}</Text>
+                </View>
+            </View>
+
+            <MethodList method={method[0]} />
+        </ScrollView>
     );
 });
 
 const styles = StyleSheet.create({
-    safeAreaContainer: {
-        flex: 1,
-        backgroundColor: '#4e674a',
-    },
     container: {
-        flex: 1,
-        justifyContent: 'space-between',
-        backgroundColor: '#f8f6f1',
-    },
-    contentContainer: {
         paddingHorizontal: 20,
     },
     image: {

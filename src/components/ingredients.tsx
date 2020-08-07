@@ -1,14 +1,12 @@
 import React, { memo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { Ingredients } from './types';
 
 export interface Props {
-    ingredients: {
-        component: string;
-        ingredients: string[];
-    };
+    ingredients: Ingredients;
 }
 
-export default memo(function Ingredients({ ingredients }: Props) {
+export default memo(function IngredientsList({ ingredients }: Props) {
     const separator = <View style={styles.separator} />;
 
     if (ingredients.ingredients.length === 0) {
