@@ -1,5 +1,11 @@
 import { Media } from '../components/types';
 
+/* TODO: this will make the search list very
+ * slow as it grows, worst case will be doing
+ * n (results) * n lg n (sort on media)
+ * Could just return first image or fix in api
+ * to return a sized mobile img.
+ */
 export function getImageFromMedia(media: Media[]) {
     let image;
     if (media.length > 0) {
