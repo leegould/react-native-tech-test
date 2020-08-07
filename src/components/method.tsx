@@ -1,14 +1,12 @@
 import React, { memo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Method } from './types';
 
 export interface Props {
-    method: {
-        component: string;
-        steps: string[];
-    };
+    method: Method;
 }
 
-export default memo(function Method({ method }: Props) {
+export default memo(function MethodList({ method }: Props) {
     if (method.steps.length === 0) {
         return null;
     }
