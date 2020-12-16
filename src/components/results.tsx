@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -15,7 +15,7 @@ export interface Props {
     onPress: (slug: string) => void;
 }
 
-export default memo(function Results({ searchText, onPress }: Props) {
+export default function Results({ searchText, onPress }: Props) {
     let onEndReachedCalledDuringMomentum = true;
     const pageSize = 15;
     const [page, setPage] = useState(1);
@@ -102,7 +102,7 @@ export default memo(function Results({ searchText, onPress }: Props) {
             />
         </View>
     );
-});
+}
 
 const styles = StyleSheet.create({
     container: {

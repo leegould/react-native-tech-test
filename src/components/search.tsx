@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -11,7 +11,7 @@ import Header from './header';
 import Results from './results';
 import RecipeModal from './recipeModal';
 
-export default memo(function Search() {
+export default function Search() {
     const [inputText, setInputText] = useState('');
     const [searchText, setSearchText] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
@@ -71,7 +71,7 @@ export default memo(function Search() {
             </Modal>
         </View>
     );
-});
+}
 
 const styles = StyleSheet.create({
     container: {

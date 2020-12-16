@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text, SafeAreaView } from 'react-native';
 import { useQuery } from '@apollo/client';
 import RecipeQuery from '../queries/recipe';
@@ -10,7 +10,7 @@ export interface Props {
     onClose: () => void;
 }
 
-export default memo(function RecipeModal({ slug, onClose }: Props) {
+export default function RecipeModal({ slug, onClose }: Props) {
     const { loading, error, data } = useQuery(RecipeQuery, {
         variables: { slug },
         notifyOnNetworkStatusChange: true,
@@ -36,7 +36,7 @@ export default memo(function RecipeModal({ slug, onClose }: Props) {
             </View>
         </SafeAreaView>
     );
-});
+}
 
 const styles = StyleSheet.create({
     safeAreaContainer: {

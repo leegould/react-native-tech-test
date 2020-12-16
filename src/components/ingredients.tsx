@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Ingredients } from './types';
 
@@ -6,7 +6,7 @@ export interface Props {
     ingredients: Ingredients;
 }
 
-export default memo(function IngredientsList({ ingredients }: Props) {
+export default function IngredientsList({ ingredients }: Props) {
     const separator = <View style={styles.separator} />;
 
     if (ingredients.ingredients.length === 0) {
@@ -25,7 +25,7 @@ export default memo(function IngredientsList({ ingredients }: Props) {
             {separator}
         </>
     );
-});
+}
 
 const styles = StyleSheet.create({
     separator: {

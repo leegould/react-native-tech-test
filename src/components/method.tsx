@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Method } from './types';
 
@@ -6,7 +6,7 @@ export interface Props {
     method: Method;
 }
 
-export default memo(function MethodList({ method }: Props) {
+export default function MethodList({ method }: Props) {
     if (method.steps.length === 0) {
         return null;
     }
@@ -22,7 +22,7 @@ export default memo(function MethodList({ method }: Props) {
             ))}
         </>
     );
-});
+}
 
 const styles = StyleSheet.create({
     title: {

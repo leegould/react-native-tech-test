@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import {
     View,
     StyleSheet,
@@ -28,7 +28,7 @@ export interface Props {
     };
 }
 
-export default memo(function Recipe({ recipe }: Props) {
+export default function Recipe({ recipe }: Props) {
     const {
         cook_time,
         ingredients,
@@ -121,7 +121,7 @@ export default memo(function Recipe({ recipe }: Props) {
             <MethodList method={method[0]} />
         </ScrollView>
     );
-});
+}
 
 const styles = StyleSheet.create({
     container: {
